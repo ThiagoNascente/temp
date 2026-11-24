@@ -1,4 +1,5 @@
 # temp
+```bash
 $out = Join-Path $env:USERPROFILE 'AuditoriaMaquina0'
 New-Item -ItemType Directory -Path $out -Force | Out-Null
 Start-Transcript -Path "$out\diagnostico.txt" -Force
@@ -17,3 +18,4 @@ Get-AppLockerPolicy -Effective -Xml | Set-Content "$out\applocker.xml" -Encoding
 Get-WinEvent -ListLog 'Security','Microsoft-Windows-Sysmon/Operational','Microsoft-Windows-AppLocker/EXE and DLL' -ErrorAction SilentlyContinue | Select-Object LogName,IsEnabled,RecordCount,LogMode | Format-Table -AutoSize
 Stop-Transcript
 Write-Host 'COLETA CONCLUIDA'
+```
