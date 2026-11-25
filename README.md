@@ -1,5 +1,32 @@
 # temp
 ```bash
+$cap = 'OpenSSH.Server~~~~0.0.1.0'
+if ((Get-WindowsCapability -Online -Name $cap).State -ne 'Installed') {
+    Add-WindowsCapability -Online -Name $cap -ErrorAction Stop
+}
+
+$regra = @{
+    Name          = 'OpenSSH-Server-In-TCP'
+    Enabled       = 'True'
+    Direction     = 'Inbound'
+    Action        = 'Allow'
+    Protocol      = 'TCP'
+    LocalPort     = 22
+    RemoteAddress = '192.168.30.190'
+}
+if (Get-NetFirewallRule -Name $regra.Name -ErrorAction SilentlyContinue) {
+    Set-NetFirewallRule @regra -ErrorAction Stop
+} else {
+    New-NetFirewallRule @regra -DisplayName 'OpenSSH Server (sshd)' -ErrorAction Stop
+}
+
+Set-Service -Name sshd -StartupType Automatic
+Start-Service -Name sshd -ErrorAction Stop
+Get-NetTCPConnection -LocalPort 22 -State Listen
+```
+
+
+```bash
 $out = Join-Path $env:USERPROFILE 'AuditoriaMaquina0'
 New-Item -ItemType Directory -Path $out -Force | Out-Null
 Start-Transcript -Path "$out\diagnostico.txt" -Force
