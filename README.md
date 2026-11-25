@@ -1,4 +1,14 @@
 # temp
+
+```bash
+Get-Service sshd
+Get-NetTCPConnection -LocalPort 22 -State Listen
+
+$regra = Get-NetFirewallRule -PolicyStore ActiveStore -Name 'OpenSSH-Server-In-TCP'
+$regra | Select-Object Enabled, Direction, Action, Profile
+$regra | Get-NetFirewallAddressFilter | Select-Object RemoteAddress
+```
+
 ```bash
 $cap = 'OpenSSH.Server~~~~0.0.1.0'
 if ((Get-WindowsCapability -Online -Name $cap).State -ne 'Installed') {
